@@ -1,0 +1,32 @@
+{
+  "name": "compo",
+  "version": "0.0.1",
+  "description": "A hot-swappable componentized… look a man in a bath",
+  "main": "index.js",
+  "scripts": {
+    "test": "tap --strict test/test-*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jhugman/compo.git"
+  },
+  "keywords": [
+    "composable",
+    "components",
+    "hobby"
+  ],
+  "author": "@jhugman",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/jhugman/compo/issues"
+  },
+  "homepage": "https://github.com/jhugman/compo#readme",
+  "dependencies": {
+    "events": "^1.0.2",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "tap": "^1.4.1"
+  }
+}

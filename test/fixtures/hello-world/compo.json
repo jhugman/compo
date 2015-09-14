@@ -1,0 +1,23 @@
+{
+  "extensions": [
+    {
+      "epID": "test.ep1",
+
+      "name": "A first extension from a manifest",
+      "url": "http://example.com/addon"
+    }
+  ],
+
+  "extensionPoints": {
+    "test.ep1": {}
+  },
+
+  "permissions": ["epTester", "notAvailable"],
+
+  "singletons": {
+    "epTester": {
+      "ctor": "./lib/ep-tester!EPTester",
+      "prop1": "yes"
+    }
+  }
+}

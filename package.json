@@ -23,6 +23,7 @@
   "homepage": "https://github.com/jhugman/compo#readme",
   "dependencies": {
     "events": "^1.0.2",
+    "resolve": "^1.1.6",
     "underscore": "^1.8.3"
   },
   "devDependencies": {

@@ -1,22 +1,48 @@
 {
   "extensions": [
     {
-      "epID": "test.ep1",
+      "epID": "test.simple",
 
-      "name": "A first extension from a manifest",
+      "name": "JustData",
+      "description": "No code, just data",
       "url": "http://example.com/addon"
+    },
+    {
+      "epID": "test.code.exec",
+
+      "name": "WithFunction",
+      "description": "The extension is presented as a function",
+      "function": "./lib/ep-extensions!aFunction"
+    },
+    {
+      "epID": "test.code.obj",
+
+      "name": "WithCtor",
+      "description": "The extension is presented as an object",
+      "object": "./lib/ep-extensions!AConstructor"
+    },
+    {
+      "epID": "test.code.obj",
+
+      "name": "WithObject",
+      "description": "The extension is presented as an object",
+      "object": "./lib/ep-extensions!aObject"
     }
   ],
 
   "extensionPoints": {
-    "test.ep1": {}
+    "test.simple": {
+      "key": "name"
+    },
+    "test.code.exec": {},
+    "test.code.obj": {}
   },
 
   "permissions": ["epTester", "notAvailable"],
 
   "singletons": {
     "epTester": {
-      "ctor": "./lib/ep-tester!EPTester",
+      "object": "./lib/ep-extensions",
       "prop1": "yes"
     }
   }

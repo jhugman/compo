@@ -61,14 +61,14 @@ test('Reifying extensions (low level)', (t) => {
 
   // let Cls = addons._loadAddonJavascript(addon, './lib/ep-extensions!aClass').object
   // t.ok(Cls, 'Constructor object has loaded')
-  let method = addons._loadAddonJavascript(addon, './lib/ep-extensions!aObject!aMethod').object
+  let method = addons._loadAddonJavascript(addon, './lib/ep-extensions!aObject.aMethod').object
   t.ok(method, 'Method object has loaded')
 
-  let obj = addons._loadAddonJavascript(addon, './lib/ep-extensions!AConstructor!getter')
+  let obj = addons._loadAddonJavascript(addon, './lib/ep-extensions!AConstructor.getter')
   let getter = obj.object.bind(obj.context)
   t.equal(typeof getter, 'function', 'getter')
 
-  obj = addons._loadAddonJavascript(addon, './lib/ep-extensions!AConstructor!setter')
+  obj = addons._loadAddonJavascript(addon, './lib/ep-extensions!AConstructor.setter')
   let setter = obj.object.bind(obj.context)
 
   setter(4)
@@ -105,14 +105,14 @@ test('Reifying extensions (high level)', (t) => {
   
 
 
-  let method = addons._reifyExtension(addon, { function: './lib/ep-extensions!aObject!aMethod' })
+  let method = addons._reifyExtension(addon, { function: './lib/ep-extensions!aObject.aMethod' })
   t.ok(method, 'Method object has loaded')
 
-  let getter = addons._reifyExtension(addon, { function: './lib/ep-extensions!AConstructor!getter' })
+  let getter = addons._reifyExtension(addon, { function: './lib/ep-extensions!AConstructor.getter' })
   
   t.equal(typeof getter, 'function', 'getter')
 
-  let setter = addons._reifyExtension(addon, { function: './lib/ep-extensions!AConstructor!setter' })
+  let setter = addons._reifyExtension(addon, { function: './lib/ep-extensions!AConstructor.setter' })
 
   setter(4)
   t.equal(getter(), 4, 'Instance of AConstructor was cached')

@@ -1,5 +1,4 @@
-
-exports.thisIsCorrectlySet = false
+let addon = require('..').addon
 
 let obj = {
   correctlySetThis: function () {

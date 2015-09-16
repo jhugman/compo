@@ -6,10 +6,40 @@ let vm = require('vm'),
 
 
 var loader = require('../lib/addon-loader')
+let createSandbox = function createSandbox (addonLoc, suffix) {
+  // suffix comes from a known module name, i.e. a filename
+
+  let srcPath = resolve.sync(suffix, { basedir: addonLoc })
+  let basedir = path.dirname(srcPath)
+  
+  let _require = function (m) {
+    let modulePath = resolve.sync(m, { basedir: basedir })
+    return require(modulePath)
+  }
+
+  var _exports = {}
+  return {
+    module: {
+      id: srcPath,
+      exports: _exports,
+      filename: srcPath,
+      require: _require,
+    },
+    require: _require,
+    __filename: srcPath,
+    __dirname: basedir,
+    exports: _exports,
+    console: console,
+    setTimeout: setTimeout,
+    clearTimeout: clearTimeout,
+    
+  }
+}
+
 
 test('Testing methods in a vm', (t) => {
   let addonLoc = path.join(__dirname, 'fixtures/hello-world')
-  let sandbox = loader.createSandbox(addonLoc, './lib/ep-vm.js')
+  let sandbox = createSandbox(addonLoc, './lib/ep-vm.js')
 
   let filename = sandbox.__filename
   let string = fs.readFileSync(filename, { encoding: 'utf8' })
@@ -76,9 +106,10 @@ test('Loading objects via require in a vm', (t) => {
   t.end()
 })
 
+
 test('Loading objects with sandbox from loader', (t) => {
   let addonLoc = path.join(__dirname, 'fixtures/hello-world')
-  let sandbox = loader.createSandbox(addonLoc, './lib/ep-vm')
+  let sandbox = createSandbox(addonLoc, './lib/ep-vm')
 
   let ctx = vm.createContext(sandbox)
   let result = vm.runInContext('require("./ep-extensions")', ctx, {

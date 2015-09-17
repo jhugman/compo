@@ -3,28 +3,28 @@
     {
       "epID": "test.simple",
 
-      "name": "JustData",
+      "id": "JustData",
       "description": "No code, just data",
       "url": "http://example.com/addon"
     },
     {
       "epID": "test.code.exec",
 
-      "name": "WithFunction",
+      "id": "WithFunction",
       "description": "The extension is presented as a function",
       "function": "./lib/ep-extensions!aFunction"
     },
     {
       "epID": "test.code.obj",
 
-      "name": "WithCtor",
+      "id": "WithCtor",
       "description": "The extension is presented as an object",
       "object": "./lib/ep-extensions!AConstructor"
     },
     {
       "epID": "test.code.obj",
 
-      "name": "WithObject",
+      "id": "WithObject",
       "description": "The extension is presented as an object",
       "object": "./lib/ep-extensions!aObject"
     }
@@ -32,7 +32,7 @@
 
   "extensionPoints": {
     "test.simple": {
-      "key": "name"
+      "key": "id"
     },
     "test.code.exec": {},
     "test.code.obj": {}

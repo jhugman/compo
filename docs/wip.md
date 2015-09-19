@@ -1,7 +1,7 @@
 TODO
 ----
-Add __dirname interpolation to addon.inflate()
-Rename addon -> plugin, everywhere.
+Add __dirname interpolation to plugin.inflate()
+Rename plugin -> plugin, everywhere.
 autostart: true - depends on lazyloading extension points
   - cheap fix is to load extensions when extensionPoint is accessed for the first time
     - still ask user to 

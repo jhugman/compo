@@ -1,4 +1,4 @@
-let addon = require('..').addon
+let plugin = require('..').plugin
 
 let obj = {
   correctlySetThis: function () {

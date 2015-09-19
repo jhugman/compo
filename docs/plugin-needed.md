@@ -8,10 +8,10 @@ compo-console plugin provides:
   - console.command: 'help'
 
 compo-mgmt
-  - management of addons console
-  - load/unload whole addons
-  - list extension points (all, by addon)
-  - list extensions (all, by addon, by extension point)
+  - management of plugins console
+  - load/unload whole plugins
+  - list extension points (all, by plugin)
+  - list extensions (all, by plugin, by extension point)
 
 compo-server plugin provides:
   - http server

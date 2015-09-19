@@ -5,11 +5,11 @@ let vm = require('vm'),
     test = require('tap').test
 
 
-var loader = require('../lib/addon-loader')
-let createSandbox = function createSandbox (addonLoc, suffix) {
+var loader = require('../lib/plugin-loader')
+let createSandbox = function createSandbox (pluginLoc, suffix) {
   // suffix comes from a known module name, i.e. a filename
 
-  let srcPath = resolve.sync(suffix, { basedir: addonLoc })
+  let srcPath = resolve.sync(suffix, { basedir: pluginLoc })
   let basedir = path.dirname(srcPath)
   
   let _require = function (m) {
@@ -38,8 +38,8 @@ let createSandbox = function createSandbox (addonLoc, suffix) {
 
 
 test('Testing methods in a vm', (t) => {
-  let addonLoc = path.join(__dirname, 'fixtures/hello-world')
-  let sandbox = createSandbox(addonLoc, './lib/ep-vm.js')
+  let pluginLoc = path.join(__dirname, 'fixtures/hello-world')
+  let sandbox = createSandbox(pluginLoc, './lib/ep-vm.js')
 
   let filename = sandbox.__filename
   let string = fs.readFileSync(filename, { encoding: 'utf8' })
@@ -47,7 +47,7 @@ test('Testing methods in a vm', (t) => {
   t.ok(string, 'ep-vm.js loaded')
   t.equal(typeof(string), 'string', 'ep-vm.js is loaded as string')
 
-  let addon = new class {
+  let plugin = new class {
     constructor () {
       this.count = 0
       this.state = {}
@@ -58,7 +58,7 @@ test('Testing methods in a vm', (t) => {
   }
 
   sandbox.t = t
-  sandbox.addon = addon
+  sandbox.plugin = plugin
   let ctx = vm.createContext(sandbox)
 
   vm.runInContext(string, ctx, {
@@ -66,13 +66,13 @@ test('Testing methods in a vm', (t) => {
     displayErrors: true,
   })
 
-  t.equal(addon.count, 2, 'Side effects are felt outside the vm context')
+  t.equal(plugin.count, 2, 'Side effects are felt outside the vm context')
 
-  t.equal(typeof addon.setter, 'function', 'Addons can add functions to their context')
-  addon.setter(3)
-  t.equal(addon.getter(), 3, 'Calling functions from outside can have side effects in the vm context')
-  t.equal(addon.state.flag, 3, 'Side effects from vm context can be on shared objects')
-  t.equal(addon.flag, 3, 'Side effects from vm context can be on directly shared objects')
+  t.equal(typeof plugin.setter, 'function', 'Plugins can add functions to their context')
+  plugin.setter(3)
+  t.equal(plugin.getter(), 3, 'Calling functions from outside can have side effects in the vm context')
+  t.equal(plugin.state.flag, 3, 'Side effects from vm context can be on shared objects')
+  t.equal(plugin.flag, 3, 'Side effects from vm context can be on directly shared objects')
 
   t.end()
 })
@@ -108,8 +108,8 @@ test('Loading objects via require in a vm', (t) => {
 
 
 test('Loading objects with sandbox from loader', (t) => {
-  let addonLoc = path.join(__dirname, 'fixtures/hello-world')
-  let sandbox = createSandbox(addonLoc, './lib/ep-vm')
+  let pluginLoc = path.join(__dirname, 'fixtures/hello-world')
+  let sandbox = createSandbox(pluginLoc, './lib/ep-vm')
 
   let ctx = vm.createContext(sandbox)
   let result = vm.runInContext('require("./ep-extensions")', ctx, {

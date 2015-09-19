@@ -5,7 +5,7 @@
 
       "id": "JustData",
       "description": "No code, just data",
-      "url": "http://example.com/addon"
+      "url": "http://example.com/plugin"
     },
     {
       "epID": "test.code.exec",

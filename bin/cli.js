@@ -1,9 +1,9 @@
 let _ = require('underscore'),
     Registry = require('../lib/registry').Registry,
-    AddonManager = require('../lib/addons-manager').AddonManager
+    PluginManager = require('../lib/plugin-manager').PluginManager
 
 let registry = new Registry(),
-    plugins = new AddonManager(registry, process.cwd())
+    plugins = new PluginManager(registry, process.cwd())
 
 let pluginNames = _.clone(process.argv)
 pluginNames.push('.')

@@ -29,6 +29,11 @@ It tries to stay in the background so as to do just enough to be really helpful,
 * code-reuse is easy
 * Don't fight with npm.
 
+Implementation principles
+-------------------------
+* No build steps
+* Promises are preferred async method. Without other guidance accept synchrony but propogate asychrony.
+
 
 High level view
 ---------------

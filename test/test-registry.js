@@ -11,7 +11,7 @@ test('Registry access, no checking', (t) => {
   let Registry = compo.Registry
   let r = new Registry()
 
-  let epid = 'mozilla.test.extensionPoint'
+  let epid = 'compo.test.extensionPoint'
 
   const E1 = createExtension('E1'),
         E2 = createExtension('E2')
@@ -20,6 +20,10 @@ test('Registry access, no checking', (t) => {
   r.register(epid, E2)
 
   let ep = r.getExtensionPoint(epid)
-  t.deepEqual(ep.extensionsArrayView(), [E1, E2], 'extension point resolves ok')
+  t.ok(ep, 'Extension point comes back from registry')
+  t.deepEqual(ep.array, [E1, E2], 'Extensions resolves ok')
+
+  r.unregister(epid, E2)
+  t.deepEqual(ep.array, [E1], 'Extensions can be removed')
   t.end()
 })

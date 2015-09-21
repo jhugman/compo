@@ -19,7 +19,6 @@ compo-server plugin provides:
   - extension points for common pages (login, error, loggedOut, home)
   - console: list routes
   - extension points for routes to serve directories
-    - collisions are handled gracefully.
 
 compo-prefs plugin provides:
   - unified persistent prefs

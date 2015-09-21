@@ -26,7 +26,7 @@ It tries to stay in the background so as to do just enough to be really helpful,
 * make it easy to make contributions to other plugins
 * plugins can be loaded and unloaded at runtime
 * plugins should be auditable, and access to other code is limited to what they ask for
-* code-reuse is easy
+* code-reuse is the default way of working
 * Don't fight with npm.
 
 Implementation principles
@@ -41,3 +41,8 @@ Define a unit of extension. For a plugin that consumes those extensions, the typ
 
 The set of extensions a plugin has collected for it is an extension point. The extension point can provide views onto this set (an object or grouped object) and `events` and `remove` events.
 
+Why auditable?
+--------------
+Auditable is a strong word. Perhaps: reasoned about mechanically.
+
+By this I mean the `compo.json` accurately reflects on what the plugin is able to do, and to write tools for testing, documentation and build systems. 

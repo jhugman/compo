@@ -18,7 +18,8 @@ test('manifest loaded', (t) => {
   t.ok(loadPlugin.then, 'it looks like a promise')
 
   loadPlugin
-    .then((plugin) => {
+    .then((plugins) => {
+      let plugin = plugins[0]
       t.ok(plugin, 'plugin exists')
       t.ok(plugin.hasOwnProperty('notAvailable'), 'plugin is allowed notAvailable, even if it is not available')
       t.notOk(plugin.hasOwnProperty('notAllowed'), 'plugin has no access to a singleton not requested in the manifest')

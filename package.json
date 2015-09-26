@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "A hot-swappable componentized… look a man in a bath",
   "main": "index.js",
+  "compo": "compo.json",
   "scripts": {
     "test": "tap --strict test/test-*.js"
   },

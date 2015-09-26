@@ -1,0 +1,27 @@
+{
+  "singletons": {
+    "eventBus": {
+      "object": "events!EventEmitter",
+      "description": "An app-wide event bus."
+    }
+  },
+
+  "extensionPoints": {
+    "compo.manifest.transform": {
+        "spec": "(plugin, manifest) => manifest"
+      },
+    "compo.extension.transform": {
+      "key": "targetEPID",
+      "description": "A ",
+      "spec": {
+        "targetEPID": "The extension point for this extension",
+        "remove": false, // default
+        "function": "(extension, additions) => Void",
+        "wrap": "(extension) => extension"
+      },
+      "compo.extension.interceptor": {
+
+      }
+    }
+  }
+}

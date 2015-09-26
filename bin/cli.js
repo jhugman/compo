@@ -1,9 +1,6 @@
 let _ = require('underscore'),
-    Registry = require('../lib/registry').Registry,
-    PluginManager = require('../lib/plugin-manager').PluginManager
-
-let registry = new Registry(),
-    plugins = new PluginManager(registry, process.cwd())
+    compo = require('..'),
+    plugins = compo.createPluginManager(process.cwd())
 
 let pluginNames = _.clone(process.argv)
 pluginNames.push('.')

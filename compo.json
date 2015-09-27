@@ -8,14 +8,17 @@
 
   "extensionPoints": {
     "compo.manifest.transform": {
-        "spec": "(plugin, manifest) => manifest"
+        "description": "Transform the manifest before loading",
+        "spec": {
+          "function": "(plugin, manifest) => manifest"
+        }
       },
     "compo.extension.transform": {
       "key": "targetEPID",
-      "description": "A ",
+      "description": "Transform each extension before loading",
       "spec": {
         "targetEPID": "The extension point for this extension",
-        "remove": false, // default
+        "remove": false,
         "function": "(extension, additions) => Void",
         "wrap": "(extension) => extension"
       },

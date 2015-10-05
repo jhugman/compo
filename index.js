@@ -10,6 +10,9 @@ exports.createPluginManager = (rootDir) => {
     .catch((ex) => {
       console.log(ex.stack)
     })
-    
+
   return plugins
 }
+
+// For testing purposes
+exports.ExtensionPoint = require('./lib/extension-points').ExtensionPointAPI

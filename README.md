@@ -14,28 +14,42 @@ It is written in ES6, to be initially run on node 4.0.
 
 All the features of `compo` are optional, but to get the benefits a certain style of writing code becomes more natural.
 
-I am uncertain if this style is enough to change the way people write node apps.
+There's a play-along-at-home demo at https://github.com/jhugman/compo-contrib-demo .
+
+Nomenclature
+------------
+I have taken the eclipse naming convention of `extensionPoints`. The corresponding `extensions` is a natural fit with extension points, however I'm aware of the confusion with Chrome Extensions.
+
+In eclipse land (and `compo`) Plugins are the container and unit of distribution, extension points gather contributions from other plugins. Extensions are those contributions.
+
+Addons, extension points, extenders could also work.
+
+OSGi's Bundle, Service, ServiceProvider don't work for me, at all.
 
 Design Goals
 ------------
 
 * make it easy to make a feature of a plugin extensible, with extension points
 * make it very easy for others to contribute to those features, with extensions
-* features can be loaded and unloaded at runtime
+* plugins (and thus features) can be loaded and unloaded at runtime
 * plugins are easily auditable, and access to other code is limited to what they ask for
-  - this is both for human reviewers
-  - packaging tools
-  - static analysis tools
+  - this is for human reviewers, but has benefits for
+    - packaging tools
+    - static analysis tools
+    - instrumentation tools
 * security – make it (at least) hard for plugins to abuse or interfere with one another, or the `compo` plugin manager itself.
 * plugin lifecycles are deterministic, but driven by and through `compo`.
+* compo's existing manifest footprint should be small, so as to be embeddable in other manifests.
 
 Design Choices
 --------------
 
-* Don't fight with npm; a plugin based on an npm module. The plugin is the unit of distribution. The distribution mechanism is npm.
-* No build steps; code is run in place, require is node's require within a plugin, and `compo` wires the plugins together.
+* Don't fight with npm; a plugin a specialised npm module. The plugin is the unit of distribution. The distribution mechanism is npm.
+* No build steps; code is run in place, require is node's require within a plugin, and `compo` wires the plugins together. `compo` is written in the node v4.0 variant of ES6.
 * Follow the Eclipse naming convention of plugins, extension points and extensions. 
-* Make it easy to evolve the manifest format, to be more or less powerful than its base state
+* Make it easy to evolve the manifest format
+  - to be more or less powerful than its base state
+  - to implement other manifest properties in terms of `compo` primitives.
 
 Compo plugins
 =============
@@ -54,9 +68,9 @@ Extensions and singletons in the manifest are simple snippets of JSON.
 
 Contributing extensions
 -----------------------
-The `extensions` property of the manifest should define an array of extension objects. `compo` 
+The `extensions` property of the manifest should define an array of extension objects.
 
-Extensions have a mandatory `epID` property, which stands for extension point ID. This should be a string matching the id of the extension point that this extension matches. [#ugly]()
+Extensions have a mandatory `epID` property, which stands for extension point ID. This should be a string matching the id of the extension point that this extension contributes to.
 
 ```json
 {
@@ -140,6 +154,8 @@ The new instance is cached for future extensions.
   ]
 }
 ```
+
+Point to two functions in `./lib/counter`:
 
 ```javascript
 module.exports = class Counter {
@@ -329,11 +345,59 @@ In `./lib/console.js` for example:
 let plugin = require('..').plugin 
 ```
 
-Within the `main` module itself, the `plugin` object won't be available until after first run. If `plugin` is needed at startup, then that logic should be wrapped in a `setTimeout()`.
+Within the `main` module itself, the `plugin` object won't be available until after first run. If `plugin` is needed at startup, then that logic should be delayed, e.g. wrapped in a `setTimeout()`. #ugly.
 
 ```javascript
 setTimeout(() => {
   let plugin = exports.plugin
 }, 1)
 ``` 
+
+Observations about developing with compo
+========================================
+While writing a game (text-adventure), and instrumenting it (graphviz maps of the gameworld and the plugins) I've made a few observations:
+
+ - Enabling easy use of the extension point makes it incredibly easy to make very sophisticated and extendable plugins, which can be composed by the user at runtime.
+ - Moving wiring into the `compo` manifest means much little or no wiring code is written, making refactoring very easy.
+ - In this respect, `compo` behaves like a variant of a dependency injector.
+ - There is a move from code to configuration (bugs can happen in config), however: the learning curve starts with contributing extensions to other plugins. This lets new developers see the fruit of their labour very quickly.
+ - Less code written means fewer bugs, easier to test. 
+ - The simplicity of the javascript interface means it is extremely easy to mock out the rest of the app when testing.
+ - Bootstrapping an extension point is easy, but choosing which extension points is a naming problem i.e. NP complete. It's hard to find the right name, but you know you've found the right one when you've found it.
+
+Some patterns
+-------------
+'Application' plugins only need define a handful of extension points to be very powerful.
+e.g.
+
+  - a game might have a 'game.room', 'game.item', 'game.spell' and 'game.spell.word'.
+  - a wallet might have 'wallet.currency.converter', 'wallet.provider.transfer', 'wallet.initialize'
+
+'Extender' plugins need only define extensions to existing extension points.
+
+  - Toronto office Mozilla game plugin.
+  - Mt Gox wallet plugin.
+
+UI is handled by lower level plugins – `compo-contrib-server` and `compo-contrib-console`, which themselves define extension points.
+
+Instrumentation, debug and admin plugins use singletons published by application plugins. 
+
+The `pluginManager` itself is available as a permission, so this applies to the running instance of the `pluginManager`. This means admin UI for addons/plugins install, lifecycle, configuration, is relatively easy to build.
+
+Prefs (much more important in client side application) can be implemented and instrumented in a single place, and provided to other addons as a service. Plugin specific prefs UI can be generated. This means prefs UI can be exposed and presented nicely with very little effort by the plugin developer.
+
+Fully functioned application plugins can offer 'delighter' extensions that may lie dormant until the consumer plugin is installed. e.g. Lightbeam plugin may offer a `content.blocker` extension; training may be delivered via an extension to the game.
+
+The manifest parsing and normalizing is itself extensible with `compo.manifest.transform`, so specialized permission logic, and implementing the additional manifest properties in terms of extensions, or restricting what the plugin can do are all possible here.
+
+Conclusion
+==========
+`compo` is a relatively simple but full-featured way of composing applications from small re-useable components. It builds on npm and node's `require`, but could be adapted for use in browser addons.
+
+I am uncertain if this style will catch on with people write node apps: at server-side the concept of plugins is a little strange; building your app out of plugins sounds a bit Drupal-ish to some or of benefit to large scale projects.
+
+"Architecture lets you build bigger things"
+------------------------------------------
+
+The concepts of extension points, and sharing-through-manifests are worth pursuing. These would most benefit much smaller non-communicating teams which is typical of client-side, and browser add-on ecosystems.
 

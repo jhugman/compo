@@ -37,7 +37,7 @@ Design Goals
     - packaging tools
     - static analysis tools
     - instrumentation tools
-* security – make it (at least) hard for plugins to abuse or interfere with one another, or the `compo` plugin manager itself.
+* security – make it (at least) hard for plugins to abuse or interfere with one another, or the `compo` plugin manager itself. The plugin cannot see the plugin manager. A plugin chooses what it wants to publish.
 * plugin lifecycles are deterministic, but driven by and through `compo`.
 * compo's existing manifest footprint should be small, so as to be embeddable in other manifests.
 
@@ -76,7 +76,7 @@ Extensions have a mandatory `epID` property, which stands for extension point ID
 {
   "extensions": [
     {
-      "epID": "console.command"
+      "epID": "console.command",
       …
     }
   ]
@@ -92,7 +92,7 @@ The extension can point to an object or function within the plugin.
 {
   "extensions": [
     {
-      "epID": "console.command"
+      "epID": "console.command",
       "function": "./lib/hello-world-command",
       "firstWord": "hello"
     }
@@ -116,7 +116,7 @@ module.exports = function (tokens, output) {
 {
   "extensions": [
     {
-      "epID": "console.command"
+      "epID": "console.command",
       "function": "./lib/console!hello",
       "firstWord": "hello"
     }
@@ -142,12 +142,12 @@ The new instance is cached for future extensions.
 {
   "extensions": [
     {
-      "epID": "console.command"
+      "epID": "console.command",
       "function": "./lib/counter!increment",
       "firstWord": "inc"
     },
     {
-      "epID": "console.command"
+      "epID": "console.command",
       "function": "./lib/counter!increment",
       "firstWord": "dec"
     }
@@ -183,12 +183,12 @@ The above example rewritten to have use an instance method on an Counter object 
 {
   "extensions": [
     {
-      "epID": "console.command"
+      "epID": "console.command",
       "function": "./lib/console!Counter.increment",
       "firstWord": "inc"
     },
     {
-      "epID": "console.command"
+      "epID": "console.command",
       "function": "./lib/console!Counter.decrement",
       "firstWord": "dec"
     }
@@ -333,7 +333,7 @@ If a permission has been asked for, but the singleton hasn't been contributed wh
 
 Accessing the `plugin` object
 -----------------------------
-Ideally, the `plugin` object should behave within a plugin accessible from the global.
+Ideally, the `plugin` object should behave within a plugin accessible from the global, like the `chrome` object in add-on development.
 
 However, the current implementation does not use any sandboxing that would make this possible.
 

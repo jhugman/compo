@@ -1,8 +1,23 @@
 let _ = require('underscore'),
+    path = require('path'),
+    cwd = process.cwd(),
     compo = require('..'),
-    plugins = compo.createPluginManager(process.cwd())
+    plugins = compo.createPluginManager(cwd),
+    compoPlugin = compo.plugin
 
 let pluginNames = _.clone(process.argv)
+
+try {
+  let cwdModule = require(path.join(cwd, 'package.json'))
+  let devDependencies = Object.keys(cwdModule.devDependencies || {})
+  devDependencies.forEach((p) => {
+    pluginNames.push(p)
+  })  
+} catch (e) {
+  console.error('compo must be started in an npm module', e.stack)
+  return
+}
+
 pluginNames.push('.')
 
 let pluginsToLoad = _.chain(pluginNames)

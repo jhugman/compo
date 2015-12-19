@@ -112,3 +112,23 @@ test('Reifying extensions (high level)', (t) => {
 
   t.end()
 })
+
+
+test('Reifying extensions (high level, II)', (t) => {
+  let registry = new Registry()
+  let rootDir = path.join(__dirname, 'fixtures')
+  let plugins = new PluginManager(registry, rootDir)
+
+  let plugin = new _Plugin(path.join(rootDir, 'hello-world'), 'hello-world')
+
+  let method1 = plugin.inflate({ function: './lib/ep-class!method1' })
+  t.ok(method1, 'method1 exists')
+  t.equal(method1(), 0, 'method1 correct instance')
+
+  let method2 = plugin.inflate({ function: './lib/ep-class!method2' })
+  t.ok(method2, 'method2 exists')
+  t.equal(method2(), 0, 'method2 correct instance')
+
+  t.equal(method1(), method2(), 'methods are on same instance')
+  t.end()
+})

@@ -7,6 +7,9 @@
   "scripts": {
     "test": "tap --strict test/test-*.js"
   },
+  "bin": {
+    "compo": "./bin/compo"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jhugman/compo.git"

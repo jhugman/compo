@@ -1,3 +1,4 @@
+// Remain here for backward compat reasons.
 let _ = require('underscore'),
     path = require('path'),
     cwd = process.cwd(),

@@ -5,6 +5,7 @@
   "main": "index.js",
   "compo": "compo.json",
   "scripts": {
+    "start": "node --use-strict ./bin/cli.js",
     "test": "tap --strict test/test-*.js"
   },
   "bin": {
